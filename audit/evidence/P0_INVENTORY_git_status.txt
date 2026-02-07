@@ -1,0 +1,26 @@
+P0_INVENTORY Evidence: Git Status
+Generated: 2026-02-02T12:00:00Z
+Run ID: run_TEST001_iambecca-test-run_2026-02-02_001
+
+Command: git status
+
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   roles/IM-01_SOURCE_BECCA.md
+	modified:   shared/IAMBECCA-OUTPUTS.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	audit/
+	inbox/
+	outbox/
+	runtime/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+=== NOTES ===
+- Modified files: Hardened specs (user updated externally)
+- Untracked: New folders created by P0_INVENTORY (expected)
+- Status: Clean baseline established, new work is properly tracked

@@ -1,0 +1,48 @@
+TRAINMAN DISTRIBUTE Evidence: Routing Decisions
+Generated: 2026-02-03T01:00:00Z
+Run ID: run_TEST001_iambecca-test-run_2026-02-02_001
+
+=== ROUTING DECISIONS ===
+
+DECISION 1: Route Phase 1 to Trinity
+  Rationale: Only phase in plan, no dependencies
+  Result: PKT_TEST001_TRAINMAN_to_TRINITY_001.md created
+
+DECISION 2: Assign TASK-001 to Neo (ANT-CODER)
+  Rationale: Task requires code creation (test script)
+  Priority: P0 (blocks TASK-002)
+  Result: PKT_TEST001_TASK-001_to_NEO.md created
+
+DECISION 3: Assign TASK-002 to Tank (ANT-TEST)
+  Rationale: Task requires test execution
+  Priority: P1 (depends on TASK-001)
+  Result: PKT_TEST001_TASK-002_to_TANK.md created
+
+DECISION 4: Ghost Twins auto-activates at phase end
+  Rationale: REVIEW state after IMPLEMENT complete
+  Result: No packet needed (Trinity activates Ghost)
+
+=== DEPENDENCY GRAPH ===
+
+TASK-001 (Neo)
+    ↓
+TASK-002 (Tank)
+    ↓
+TASK-003 (Ghost Twins) [REVIEW]
+
+No circular dependencies detected.
+
+=== BATCH CLOSURE CORRIDOR ===
+
+Required artifacts specified in Trinity packet:
+- Ant Self-Evals: SE_ANT-001.md, SE_ANT-002.md
+- BQ Per-Ant Verify: BQ_VERIFY_ANT-001.md, BQ_VERIFY_ANT-002.md
+- BQ Batch Verify: BQ_VERIFY_BATCH-001.md
+- Ghost Archive: ARCHIVE_BATCH-001.md (Ghost creates)
+- Certificate: CERT_BATCH-001_PASS.md (Trinity creates after Ghost PASS)
+
+=== VERIFICATION ===
+Routing documented: YES
+Dependencies resolved: YES
+Circular check: PASSED
+Batch corridor: SPECIFIED

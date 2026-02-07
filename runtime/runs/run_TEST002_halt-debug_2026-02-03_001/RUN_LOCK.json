@@ -1,0 +1,12 @@
+{
+  "status": "LOCKED",
+  "target_name": "IAMBECCA | TEST | INTEGRATION | halt-debug | MORPHEUS",
+  "run_id": "run_TEST002_halt-debug_2026-02-03_001",
+  "lock_owner": "run_TEST002_halt-debug_2026-02-03_001",
+  "lock_time": "2026-02-03T10:00:00Z",
+  "lock_reason": "Test 5.2: Halt + Debug integration test",
+  "release_conditions": [
+    "state == COMPLETE",
+    "manual override by BECCA"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Current state tracker for IAMBecca pre-flight guard",
+  "target_name": "IAMBECCA | <CLIENT_ID> | <PROJECT_TYPE> | <PROJECT_SLUG> | <MATRIX_CODENAME>",
+  "run_id": "run_<CLIENT>_<slug>_<YYYY-MM-DD>_<seq>",
+  "expected_next_role_code": "IM-##",
+  "expected_next_role_name": "<DisplayName>",
+  "current_state": "P0_INVENTORY | ANALYZE | PROPOSE | IMPLEMENT | REVIEW | HEALTH_REPORT | COMPLETE | HALTED",
+  "last_updated": "<ISO8601 timestamp>",
+  "last_role": "IM-## (<RoleName>)",
+  "run_status": "ACTIVE | HALTED | COMPLETE",
+  "notes": "Pre-flight guard reads this before allowing role activation"
+}

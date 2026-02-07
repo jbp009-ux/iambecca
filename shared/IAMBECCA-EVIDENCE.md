@@ -74,6 +74,31 @@ placeholder/...
 | Test result | test name + pass/fail + output |
 | Security issue | file_path + line_number + vulnerability description + fix |
 | Performance | metric + baseline + measured value |
+| Task Progress | progress file path + status + checkpoint log |
+
+### 2.4 Task Progress File (MANDATORY)
+
+Every role MUST create a Task Progress File before starting work:
+
+| Requirement | Description |
+|-------------|-------------|
+| **Path** | `runtime/runs/<run_id>/progress/TASK_<role>_<task_id>.md` |
+| **Template** | Use `templates/task_progress.md` |
+| **Create** | Within 30 seconds of receiving task |
+| **Update** | Every phase change, every 5 minutes, every blocker |
+
+**⚠️ CRITICAL: MARK DONE IMMEDIATELY**
+```
+Every time you complete a task or subtask:
+1. STOP what you're doing
+2. Update progress file: status: COMPLETED
+3. Add CHECKPOINT LOG entry with ✅ Result
+4. THEN move to next task
+
+DO NOT batch completions. Mark DONE the INSTANT you finish.
+```
+
+**Why:** If chat crashes before you mark done, the next session redoes completed work.
 
 ---
 
@@ -123,6 +148,63 @@ When `strict=True`:
 - Score must be >= 70%
 - ALL file paths must be real (not placeholders)
 - ALL recommendations must be specific (not generic)
+
+---
+
+## 3.5) Evidence Scoring Rubric (FROZEN)
+
+The evidence contract validator uses this rubric to calculate scores:
+
+### Scoring Dimensions (100 points total)
+
+| Dimension | Weight | Criteria |
+|-----------|--------|----------|
+| **Path Validity** | 30 pts | All file paths exist and are verifiable |
+| **Specificity** | 25 pts | Line numbers, function names, specific locations |
+| **Completeness** | 20 pts | All required fields present per finding type |
+| **Verification** | 15 pts | Each claim has corresponding proof |
+| **No Placeholders** | 10 pts | Zero placeholder or generic patterns |
+
+### Scoring Rules
+
+```
+For each finding:
+  +6 pts  file_path is real (not placeholder)
+  +4 pts  line_number provided
+  +4 pts  code_snippet provided
+  +3 pts  severity specified
+  +4 pts  fix_recommendation is specific (>20 chars, not generic)
+  +4 pts  verification method provided
+
+Deductions:
+  -10 pts  ANY placeholder path detected
+  -5 pts   Generic recommendation ("fix this", "TODO")
+  -3 pts   Missing required field
+  -5 pts   Claim without evidence
+```
+
+### Score Thresholds
+
+| Score | Grade | Action |
+|-------|-------|--------|
+| 90-100 | ✅ EXCELLENT | Auto-approve, fast-track |
+| 70-89 | ✅ PASS | Standard approval |
+| 50-69 | ⚠️ MARGINAL | Flag for review, may pass with fixes |
+| 0-49 | 🔴 FAIL | 🔑 REJECTED, must resubmit |
+
+### BECCA Score Integration
+
+When BECCA scores Ant work (for Neo and high-risk tasks), use this rubric:
+
+| Dimension | Score (1-5) | Weight | Description |
+|-----------|-------------|--------|-------------|
+| Correctness | 1-5 | 0.30 | Does the work actually solve the problem? |
+| Completeness | 1-5 | 0.25 | Are all requirements addressed? |
+| Evidence Quality | 1-5 | 0.20 | Is evidence verifiable per this rubric? |
+| Doctrine Compliance | 1-5 | 0.15 | Follows IAMBecca protocols (isolation, etc.)? |
+| Efficiency | 1-5 | 0.10 | Minimal changes, no over-engineering? |
+
+**Calculation:** `Total = Σ(score × weight) → 1.00-5.00 scale`
 
 ---
 

@@ -64,6 +64,30 @@ backup_validation_required: <true|false>
 
 ---
 
+## ⚫ ISOLATION REQUIREMENTS (from Oracle assessment)
+
+touches_tenant_data: <YES|NO>
+isolation_risk: <LOW|MEDIUM|HIGH>
+isolation_requirements: <specific requirements from Oracle plan | "N/A">
+seraph_review_required: <true|false>
+
+### If touches_tenant_data = YES:
+- Trinity MUST verify Tenant Boundary Statement in Ant reports
+- Tank (IM-07) MUST write isolation tests
+- Seraph (IM-08) review recommended if isolation_risk >= MEDIUM
+
+---
+
+## BECCA REVIEW GATE (for high-risk tasks requiring Source verification)
+
+becca_review_required: <true|false>
+becca_review_reason: <string | empty>
+becca_review_scope: <CODE|SECURITY|FIREBASE|INSPECTION|RELEASE|DATA|UI|OTHER>
+becca_review_inbox_path: inbox/becca/
+becca_review_due_by_state: <STATE_NAME>
+
+---
+
 ## SELF-EVALUATION GATE (only if to_role_code == BECCA)
 
 needs_evaluation: <true|false>
@@ -106,6 +130,7 @@ next_role_display: "<DisplayName>"
 | `HORSEMEN_REQUEST` | Failed reattempt → Sentinels | evidence from original + debugger + failed reattempt |
 | `BACKUP_GATE` | Before reattempt/horsemen | backup_ref, validation |
 | `EVALUATION` | Any role → BECCA | self_checklist, evidence_links |
+| `BECCA_REVIEW_REQUEST` | Trinity → Source (high-risk tasks) | becca_review_scope, evidence_links |
 
 ---
 

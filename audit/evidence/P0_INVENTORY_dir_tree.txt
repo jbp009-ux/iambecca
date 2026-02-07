@@ -1,0 +1,36 @@
+P0_INVENTORY Evidence: Directory Tree
+Generated: 2026-02-02T12:00:00Z
+Run ID: run_TEST001_iambecca-test-run_2026-02-02_001
+
+=== FOLDER STRUCTURE ===
+
+inbox/
+├── oracle/
+│   └── PKT_TEST001_iambecca-test-run_BECCA_to_MQ_001.md
+├── distributor/
+├── bq/
+├── ants/
+├── debugger/
+└── ghost/
+
+outbox/
+├── oracle/
+├── ants/
+└── debugger/
+
+audit/
+├── evidence/
+│   └── (this file)
+├── reviews/
+├── debugger_addendums/
+└── health_reports/
+
+runtime/
+└── runs/
+    └── run_TEST001_iambecca-test-run_2026-02-02_001/
+        ├── RUNBOARD.md
+        ├── RUN_LOCK.json
+        └── BACKUP_GATE_000.md
+
+=== VERIFICATION ===
+All required folders exist: YES

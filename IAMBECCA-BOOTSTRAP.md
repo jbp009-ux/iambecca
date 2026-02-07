@@ -101,25 +101,39 @@ PMX_ANALYZE
 
 ### 2.7 Frozen Role Codes
 
-| Code | Display Name | Old Name |
-|------|--------------|----------|
-| BECCA | Source | Becca |
-| MQ | Oracle | Master Queen |
-| BQ | Trinity | Baby Queen |
-| DISTRIBUTOR | Trainman | Planner Distributor / Dequan |
-| ANT-CODER | Neo | Ant Coders |
-| ANT-DEBUGGER | Morpheus | Debugger Lab |
-| ANT-TEST | Tank | QA/Test Ant |
-| ANT-SECURITY | Seraph | Security Ant |
-| ANT-FIREBASE | Link | Firebase Ant |
-| ANT-UI | Niobe | UI Ant |
-| ANT-DATA | Apoc | Data Ant |
-| GHOST | Ghost Twins | Ghost Archivist + Ghost Inspector |
-| HORSEMEN | Sentinels | Five Horsemen |
-| PLANNER | Merovingian | Tactical Planner |
-| ARCHITECT | Architect | Prompt Architect |
-| CODE_INSPECTION | Agents | Code Inspection |
-| PM_INSPECTOR | Keymaker | Prompt Governance |
+**Core Roles (IM-01 to IM-13):**
+
+| IM # | Code | Display Name | Old Name | File |
+|------|------|--------------|----------|------|
+| IM-01 | BECCA | Source | Becca | `roles/IM-01_SOURCE_BECCA.md` |
+| IM-02 | MQ | Oracle | Master Queen | `roles/IM-02_ORACLE_MQ.md` |
+| IM-03 | BQ | Trinity | Baby Queen | `roles/IM-03_TRINITY_BQ.md` |
+| IM-04 | DISTRIBUTOR | Trainman | Planner Distributor / Dequan | `roles/IM-04_TRAINMAN_DISTRIBUTOR.md` |
+| IM-05 | ANT-CODER | Neo | Ant Coders | `roles/IM-05_NEO_ANT-CODER.md` |
+| IM-06 | ANT-DEBUGGER | Morpheus | Debugger Lab | `roles/IM-06_MORPHEUS_ANT-DEBUGGER.md` |
+| IM-07 | ANT-TEST | Tank | QA/Test Ant | `roles/IM-07_TANK_ANT-TEST.md` |
+| IM-08 | ANT-SECURITY | Seraph | Security Ant | `roles/IM-08_SERAPH_ANT-SECURITY.md` |
+| IM-09 | ANT-FIREBASE | Link | Firebase Ant | `roles/IM-09_LINK_ANT-FIREBASE.md` |
+| IM-10 | ANT-UI | Niobe | UI Ant | `roles/IM-10_NIOBE_ANT-UI.md` |
+| IM-11 | ANT-DATA | Apoc | Data Ant | `roles/IM-11_APOC_ANT-DATA.md` |
+| IM-12 | GHOST | Ghost Twins | Ghost Archivist + Ghost Inspector | `roles/IM-12_GHOST-TWINS_ANT-REVIEW.md` |
+| IM-13 | HORSEMEN | Sentinels | Five Horsemen | `roles/IM-13_SENTINELS_HORSEMEN.md` |
+
+**Extended Roles (EXT-01 to EXT-04):**
+
+| EXT # | Code | Display Name | Old Name | File |
+|-------|------|--------------|----------|------|
+| EXT-01 | PLANNER | Merovingian | Tactical Planner | `roles/EXT-01_MEROVINGIAN_PLANNER.md` |
+| EXT-02 | PM_INSPECTOR | Keymaker | Prompt Governance | `roles/EXT-02_KEYMAKER_PM-INSPECTOR.md` |
+| EXT-03 | ARCHITECT | Architect | Prompt Architect | (governance/prompts/) |
+| EXT-04 | CODE_INSPECTION | Agents | Code Inspection | (integrated with Ghost Twins) |
+
+**IMPORTANT:** Do not confuse Matrix codenames with role codes:
+- Tank = ANT-TEST (writes tests), NOT Merovingian
+- Merovingian = PLANNER (tactical planning), NOT ANT-TEST
+- Link = ANT-FIREBASE, NOT Architect
+- Sentinels = HORSEMEN (final escalation), NOT Keymaker
+- Keymaker = PM_INSPECTOR (prompt governance), NOT HORSEMEN
 
 ---
 
@@ -220,7 +234,7 @@ Load order:
 ```
 projects/<client>/<type>/<slug>/
 ├── inbox/
-│   ├── becca/
+│   ├── becca/          ← BECCA reads backup gate packets here
 │   ├── oracle/
 │   ├── distributor/
 │   ├── bq/
@@ -235,8 +249,8 @@ projects/<client>/<type>/<slug>/
 │   ├── bq/
 │   ├── ants/
 │   ├── debugger/
-│   ├── ghost/
-│   └── horsemen/
+│   ├── ghost/          ← Ghost Twins write extracted addendums here
+│   └── horsemen/       ← Horsemen findings
 ├── audit/
 │   ├── self_evals/
 │   ├── becca_verifications/
@@ -244,9 +258,11 @@ projects/<client>/<type>/<slug>/
 │   ├── evidence/
 │   └── debugger_addendums/
 └── runtime/
+    ├── state/
+    │   └── current_state.json  ← Pre-flight guard reads this
     └── runs/<run_id>/
         ├── RUNBOARD.md
-        ├── RUN_LOCK.json
+        ├── RUN_LOCK.json       ← Pre-flight guard verifies LOCKED
         ├── BACKUP_GATE_<seq>.md
         └── FINAL_STATUS.md
 ```

@@ -1,0 +1,16 @@
+P0_INVENTORY Evidence: Run Directory Listing
+Generated: 2026-02-02T12:00:00Z
+Run ID: run_TEST001_iambecca-test-run_2026-02-02_001
+
+Command: Get-ChildItem runtime/runs/run_TEST001_iambecca-test-run_2026-02-02_001/
+
+Mode   LastWriteTime        Length Name
+----   -------------        ------ ----
+-a---- 2/2/2026 11:59:21 PM   1294 RUNBOARD.md
+-a---- 2/2/2026 11:59:19 PM    313 RUN_LOCK.json
+-a---- 2/2/2026 12:00:00 AM    xxx BACKUP_GATE_000.md
+
+=== VERIFICATION ===
+RUNBOARD.md exists: YES
+RUN_LOCK.json exists: YES
+BACKUP_GATE_000.md exists: YES (created this session)

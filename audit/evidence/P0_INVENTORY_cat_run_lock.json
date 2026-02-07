@@ -1,0 +1,29 @@
+P0_INVENTORY Evidence: RUN_LOCK.json Contents
+Generated: 2026-02-02T12:00:00Z
+Run ID: run_TEST001_iambecca-test-run_2026-02-02_001
+
+Command: cat runtime/runs/run_TEST001_iambecca-test-run_2026-02-02_001/RUN_LOCK.json
+
+{
+  "status": "LOCKED",
+  "target_name": "IAMBECCA | TEST001 | GOVERNANCE | iambecca-test-run | NEO",
+  "run_id": "run_TEST001_iambecca-test-run_2026-02-02_001",
+  "lock_owner": "run_TEST001_iambecca-test-run_2026-02-02_001",
+  "lock_time": "2026-02-02T12:00:00Z",
+  "lock_reason": "P0_INVENTORY initialization",
+  "release_conditions": [
+    "state == COMPLETE",
+    "manual override by BECCA"
+  ]
+}
+
+=== SCHEMA VALIDATION ===
+status: LOCKED ✅
+target_name: present ✅
+run_id: matches ✅
+lock_owner: matches run_id ✅
+lock_time: ISO format ✅
+lock_reason: P0_INVENTORY initialization ✅
+release_conditions: array with 2 conditions ✅
+
+SCHEMA VALID: YES
