@@ -1,0 +1,126 @@
+# Continuous Integration for IAMBecca
+# Governance Framework Validation
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate Governance Framework
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate role files exist
+        run: |
+          echo "=== Checking all 13 IM roles ==="
+          missing=0
+          for i in 01 02 03 04 05 06 07 08 09 10 11 12 13; do
+            count=$(ls roles/IM-${i}_*.md 2>/dev/null | wc -l)
+            if [ "$count" -eq 0 ]; then
+              echo "MISSING: IM-${i}"
+              missing=$((missing + 1))
+            else
+              echo "OK: IM-${i} ($(ls roles/IM-${i}_*.md))"
+            fi
+          done
+          if [ "$missing" -gt 0 ]; then
+            echo "ERROR: ${missing} role file(s) missing"
+            exit 1
+          fi
+          echo "All 13 IM roles present"
+
+      - name: Validate shared modules exist
+        run: |
+          echo "=== Checking shared modules ==="
+          modules=(
+            "IAMBECCA-IDENTITY"
+            "IAMBECCA-ISOLATION"
+            "IAMBECCA-CHAINS"
+            "IAMBECCA-RECOVERY"
+            "IAMBECCA-ERRORS"
+            "IAMBECCA-EVIDENCE"
+            "IAMBECCA-GATES"
+            "IAMBECCA-PROTOCOL"
+            "IAMBECCA-OUTPUTS"
+            "IAMBECCA-TOOLS"
+            "IAMBECCA-MEMORY"
+            "IAMBECCA-LEDGER"
+            "IAMBECCA-GUARDRAILS"
+            "IAMBECCA-QUEUE"
+            "IAMBECCA-ACTIVATION"
+            "IAMBECCA-PROJECTS"
+          )
+          missing=0
+          for mod in "${modules[@]}"; do
+            if [ ! -f "shared/${mod}.md" ]; then
+              echo "MISSING: shared/${mod}.md"
+              missing=$((missing + 1))
+            else
+              echo "OK: shared/${mod}.md"
+            fi
+          done
+          if [ "$missing" -gt 0 ]; then
+            echo "ERROR: ${missing} shared module(s) missing"
+            exit 1
+          fi
+          echo "All 16 shared modules present"
+
+      - name: Validate PROTOCOL referenced in all roles
+        run: |
+          echo "=== Checking IAMBECCA-PROTOCOL.md is referenced in all roles ==="
+          missing=0
+          for role in roles/IM-*.md; do
+            if ! grep -q "IAMBECCA-PROTOCOL" "$role"; then
+              echo "MISSING PROTOCOL ref: $role"
+              missing=$((missing + 1))
+            else
+              echo "OK: $role"
+            fi
+          done
+          if [ "$missing" -gt 0 ]; then
+            echo "ERROR: ${missing} role(s) missing PROTOCOL reference"
+            exit 1
+          fi
+          echo "All roles reference IAMBECCA-PROTOCOL.md"
+
+      - name: Validate folder structure
+        run: |
+          echo "=== Checking required folders ==="
+          folders=("inbox" "outbox" "audit" "runtime" "shared" "roles" "templates" "tests")
+          missing=0
+          for dir in "${folders[@]}"; do
+            if [ ! -d "$dir" ]; then
+              echo "MISSING: $dir/"
+              missing=$((missing + 1))
+            else
+              echo "OK: $dir/"
+            fi
+          done
+          if [ "$missing" -gt 0 ]; then
+            echo "ERROR: ${missing} required folder(s) missing"
+            exit 1
+          fi
+          echo "All required folders present"
+
+      - name: Run tests (if present)
+        run: |
+          if [ -f "tests/activation_test.js" ]; then
+            echo "=== Running activation tests ==="
+            node tests/activation_test.js
+          else
+            echo "No test files found — skipping"
+          fi

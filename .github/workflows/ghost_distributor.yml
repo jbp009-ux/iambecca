@@ -1,0 +1,86 @@
+# Ghost Distributor — IAMBecca Governance Automation
+# Routes completed Ant reports into Ghost Index files
+# Triggered when new reports land in outbox/
+
+name: Ghost Distributor
+
+on:
+  push:
+    paths:
+      - "outbox/ants/*.md"
+      - "outbox/ants/**/*.md"
+      - "outbox/horsemen/*.md"
+      - "outbox/debugger/*.md"
+      - "outbox/ghost/*.md"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Debug input folder
+        run: |
+          echo "=== Listing outbox/ants ==="
+          ls -la outbox/ants || true
+          echo "=== Listing outbox/horsemen ==="
+          ls -la outbox/horsemen || true
+
+      - name: Run distributor
+        run: |
+          echo "=== Running Ghost Distributor ==="
+          if [ -f "wrappers/ghost_distributor.py" ]; then
+            python wrappers/ghost_distributor.py --repo . --input outbox/ants
+          else
+            echo "⚠️ ghost_distributor.py not found — skipping distribution"
+            echo "Create wrappers/ghost_distributor.py to enable automated Ghost Index updates"
+          fi
+          echo "=== Distributor Complete ==="
+
+      - name: Check for changes
+        id: changes
+        run: |
+          echo "=== Checking for file changes ==="
+          git status
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected - will create PR"
+            git diff --name-only
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected - skipping PR creation"
+          fi
+
+      - name: Create PR with routed outputs
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ github.token }}
+          branch: bot/ghost-distribution
+          delete-branch: true
+          title: "chore(governance): distribute Ghost report(s)"
+          commit-message: "chore(governance): distribute Ghost report(s)"
+          body: |
+            Automated deterministic routing from outbox/ants/
+            into Ghost Index files (MASTER_ANT_INDEX, FILE_OWNERSHIP_MAP, PHEROMONE_REGISTRY).
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.changes.outputs.has_changes }}" == "true" ]; then
+            echo "PR created with distributed report changes"
+          else
+            echo "No valid Ghost patch reports found to process (or already applied)"
+            echo "Check Run distributor logs for [SKIP]/[WARN]"
+          fi

@@ -1,0 +1,22 @@
+# Claude Code settings (may contain API keys)
+.claude/
+
+# Windows artifacts
+nul
+%TEMP%*
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Separate git repos embedded in project
+claude-talk-to-figma-mcp/
+
+# Environment files
+.env
+.env.local
+.env.*.local
